@@ -58,6 +58,8 @@ var BOOKING_COLUMNS = ['Booking ID', 'Name', 'Email', 'Company', 'Service', 'Pro
 function doPost(e) {
   try {
     var body = JSON.parse(e.postData.contents);
+    console.log('DEPLOYMENT TEST — CURRENT CODE IS RUNNING');
+    console.log('REFERENCE ID: ' + body.referenceId);
 
     var expectedSecret = PropertiesService.getScriptProperties().getProperty('SHARED_SECRET');
     if (expectedSecret && body.secret !== expectedSecret) {
@@ -267,10 +269,19 @@ function sendBookingClientEmail(body) {
     row('Service', body.service) +
     row('Project Details', body.message) +
     '</table>' +
-    '<p style="font-size:13.5px;line-height:1.6;color:' + MUTED + ';margin:0;">We look forward to speaking with you and understanding your requirements. You\'ll also receive a reminder 24 hours and 30 minutes before the call.</p>' +
+    '<p style="font-size:13.5px;line-height:1.6;color:' + MUTED + ';margin:0;">We look forward to connecting with you.</p>' +
     '<p style="font-size:13px;color:' + MUTED + ';margin:20px 0 0;">Regards,<br />Nirmora Creative — We engineer growth.</p>'
   );
-  GmailApp.sendEmail(body.email, 'Your Nirmora Creative Call is Confirmed — ' + body.referenceId, '', { htmlBody: html, name: 'Nirmora Creative' });
+
+  GmailApp.sendEmail(
+    body.email,
+    'Your Nirmora Creative Call is Confirmed — ' + body.referenceId,
+    '',
+    {
+      htmlBody: html,
+      name: 'Nirmora Creative'
+    }
+  );
 }
 
 function sendBookingAdminEmail(body) {
@@ -345,4 +356,96 @@ function jsonResponse(obj) {
 
 function doGet(e) {
   return jsonResponse({ success: true, service: 'Nirmora Creative Lead System', status: 'online', message: 'Google Apps Script is running.' });
+}
+function testGmailSend() {
+  try {
+    GmailApp.sendEmail(
+      'nirmoracreative@gmail.com',
+      'Nirmora Gmail Test',
+      'This is a direct Gmail test from the Nirmora Creative Apps Script.',
+      {
+        name: 'Nirmora Creative'
+      }
+    );
+
+    console.log('SUCCESS — GmailApp.sendEmail completed.');
+  } catch (err) {
+    console.error('GMAIL TEST FAILED — ' + (err && err.message ? err.message : String(err)));
+    throw err;
+  }
+}
+function testContactEmails() {
+  var body = {
+    referenceId: 'TEST-001',
+    name: 'Priya Sharma',
+    email: 'ps0078281@gmail.com',
+    company: 'Test Company',
+    service: 'Website Development',
+    message: 'This is a direct Contact email test.'
+  };
+
+  sendContactClientEmail(body);
+  sendContactAdminEmail(body);
+
+  console.log('CONTACT EMAIL TEST COMPLETED');
+}
+// ============================================================================
+// NIRMORA REMINDER SCHEDULER
+// Google Apps Script replaces the Vercel 15-minute cron.
+// ============================================================================
+
+function runNirmoraReminders() {
+  var props = PropertiesService.getScriptProperties();
+
+  var vercelUrl = props.getProperty('VERCEL_REMINDER_URL');
+  var secret = props.getProperty('REMINDER_CRON_SECRET');
+
+  if (!vercelUrl) {
+    throw new Error('VERCEL_REMINDER_URL is not configured.');
+  }
+
+  var options = {
+    method: 'post',
+    contentType: 'application/json',
+    muteHttpExceptions: true,
+    headers: {
+      'X-Reminder-Secret': secret || ''
+    }
+  };
+
+  var response = UrlFetchApp.fetch(vercelUrl, options);
+
+  var code = response.getResponseCode();
+  var body = response.getContentText();
+
+  console.log('Reminder scheduler response: ' + code);
+  console.log(body);
+
+  if (code < 200 || code >= 300) {
+    throw new Error(
+      'Reminder scheduler failed. HTTP ' + code + ': ' + body
+    );
+  }
+}
+
+
+// Run this function ONCE manually.
+// It removes old copies of the reminder trigger and creates
+// exactly one new trigger that runs every 15 minutes.
+
+function setupNirmoraReminderTrigger() {
+  var triggers = ScriptApp.getProjectTriggers();
+
+  for (var i = 0; i < triggers.length; i++) {
+    if (triggers[i].getHandlerFunction() === 'runNirmoraReminders') {
+      ScriptApp.deleteTrigger(triggers[i]);
+    }
+  }
+
+  ScriptApp.newTrigger('runNirmoraReminders')
+    .timeBased()
+    .everyMinutes(15)
+    .create();
+
+  console.log('Nirmora reminder trigger created: every 15 minutes.');
 }
