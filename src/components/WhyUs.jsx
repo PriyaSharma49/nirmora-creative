@@ -442,7 +442,7 @@ function PinnedWhyUs({ tier }) {
    ============================================================================ */
 function SequentialSheet({ principle, index, animated }) {
   const ref = useRef(null)
-  const inView = useInView(ref, { once: true, amount: 0.4 })
+  const inView = useInView(ref, { once: true, amount: 0.2 })
   const tilt = index % 2 === 0 ? -1.4 : 1.4
   const show = !animated || inView
   // Mobile diagrams aren't scroll-linked — always fully drawn; only the
@@ -489,7 +489,7 @@ function SequentialSheet({ principle, index, animated }) {
 
 function SequentialWhyUs({ animated }) {
   const introRef = useRef(null)
-  const introInView = useInView(introRef, { once: true, amount: 0.5 })
+  const introInView = useInView(introRef, { once: true, amount: 0.25 })
   const showIntro = !animated || introInView
 
   return (

@@ -396,14 +396,20 @@ export default function Portfolio() {
       />
 
       <div className="relative w-full max-w-[1320px] mx-auto px-6 md:px-10">
-        <div className="max-w-[640px] mx-auto text-center mb-16 md:mb-20">
+        <motion.div
+          className="max-w-[640px] mx-auto text-center mb-16 md:mb-20"
+          initial={reduced ? false : { opacity: 0, y: 18 }}
+          whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true, amount: 0.3 }}
+          transition={{ duration: 0.6, ease: EASE }}
+        >
           <div className="eyebrow justify-center">Why Nirmora</div>
           <h2 className="font-display font-semibold leading-[1.1] tracking-tight text-[#F4F1E8]" style={{ fontSize: 'clamp(30px, 4.4vw, 48px)' }}>
             We could tell you.
             <br />
             Or we could show you.
           </h2>
-        </div>
+        </motion.div>
 
         <DesktopField
           fieldRef={fieldRef}

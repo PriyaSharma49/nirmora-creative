@@ -126,14 +126,14 @@ function ProofBlock({ reduced }) {
       <motion.div
         initial={reduced ? undefined : { opacity: 0, y: 24 }}
         whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
-        viewport={{ once: true, amount: 0.4 }}
+        viewport={{ once: true, amount: 0.2 }}
         transition={{ duration: 0.7, ease: EASE }}
         className="lg:col-span-6"
       >
         <motion.div
           initial={reduced ? undefined : { opacity: 0, y: 14 }}
           whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.5, ease: EASE }}
           className="eyebrow"
         >
@@ -142,7 +142,7 @@ function ProofBlock({ reduced }) {
         <motion.h3
           initial={reduced ? undefined : { opacity: 0, y: 18 }}
           whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.6, ease: EASE, delay: 0.1 }}
           className="font-display font-semibold text-[30px] md:text-[42px] leading-[1.12] tracking-tight text-[#20221F]"
         >
@@ -151,7 +151,7 @@ function ProofBlock({ reduced }) {
         <motion.p
           initial={reduced ? undefined : { opacity: 0, y: 14 }}
           whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.4 }}
+          viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.6, ease: EASE, delay: 0.2 }}
           className="mt-5 max-w-[440px] text-[15px] md:text-[16px] leading-relaxed"
           style={{ color: '#66665F' }}
@@ -202,7 +202,7 @@ export default function ContentShowcase() {
             <motion.div
               initial={reduced ? undefined : { opacity: 0, y: 10 }}
               whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
-              viewport={{ once: true, amount: 0.6 }}
+              viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.5, ease: EASE }}
               className="eyebrow"
             >
@@ -213,7 +213,7 @@ export default function ContentShowcase() {
                 <motion.span
                   initial={reduced ? undefined : { opacity: 0, y: 26, filter: 'blur(6px)' }}
                   whileInView={reduced ? undefined : { opacity: 1, y: 0, filter: 'blur(0px)' }}
-                  viewport={{ once: true, amount: 0.6 }}
+                  viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.65, ease: EASE, delay: 0.12 }}
                   className="block"
                 >
@@ -224,7 +224,7 @@ export default function ContentShowcase() {
                 <motion.span
                   initial={reduced ? undefined : { opacity: 0, y: 26, filter: 'blur(6px)' }}
                   whileInView={reduced ? undefined : { opacity: 1, y: 0, filter: 'blur(0px)' }}
-                  viewport={{ once: true, amount: 0.6 }}
+                  viewport={{ once: true, amount: 0.3 }}
                   transition={{ duration: 0.65, ease: EASE, delay: 0.26 }}
                   className="block"
                 >
@@ -237,7 +237,7 @@ export default function ContentShowcase() {
           <motion.p
             initial={reduced ? undefined : { opacity: 0, y: 10 }}
             whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.6 }}
+            viewport={{ once: true, amount: 0.3 }}
             transition={{ duration: 0.6, ease: EASE, delay: 0.4 }}
             className="max-w-[300px] text-[14.5px] md:text-[15px] leading-relaxed md:text-right"
             style={{ color: '#66665F' }}
