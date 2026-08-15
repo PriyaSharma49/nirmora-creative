@@ -1,0 +1,47 @@
+/* Service Detail — semantic design tokens.
+   Scoped to `.sd` so nothing here reaches any other page or component.
+   Light is the default rendering — Nirmora's premium/editorial direction,
+   matched to the site-wide ivory/charcoal/sage system.
+   `.sd-dark` is a standalone override: applying it to any element (the page
+   root, or a single section nested inside the light root) flips every token
+   for that subtree via normal CSS custom-property inheritance — this is how
+   individual "dark scene" sections alternate against the light page without
+   a global theme toggle. */
+
+.sd {
+  --sd-background: #F4F1E8;
+  --sd-background-secondary: #E9E5DA;
+  --sd-surface: #FAF9F5;
+  --sd-text: #20221F;
+  --sd-text-muted: rgba(32, 34, 31, 0.58);
+  --sd-border: rgba(32, 34, 31, 0.14);
+  --sd-accent: #B98A32;
+  --sd-accent-contrast: #20221F;
+
+  background: var(--sd-background);
+  color: var(--sd-text);
+}
+
+.sd-dark {
+  --sd-background: #171916;
+  --sd-background-secondary: #20221F;
+  --sd-surface: #252822;
+  --sd-text: #F4F1E8;
+  --sd-text-muted: rgba(244, 241, 232, 0.58);
+  --sd-border: rgba(244, 241, 232, 0.12);
+  --sd-accent: #D4AF5A;
+  --sd-accent-contrast: #171916;
+
+  background: var(--sd-background);
+  color: var(--sd-text);
+}
+
+.sd-focusable {
+  outline: none;
+}
+
+.sd-focusable:focus-visible {
+  outline: 2px solid var(--sd-accent);
+  outline-offset: 3px;
+  border-radius: 4px;
+}

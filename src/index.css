@@ -1,0 +1,306 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: #FBF7EF;
+  color: #20221F;
+  font-feature-settings: "ss01" 1, "kern" 1;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Editorial display type — Instrument Serif ships one weight by design.
+   This rule sits outside any @layer so it always wins over utility
+   classes like font-bold/font-semibold applied in components. */
+.font-display,
+h1, h2, h3, h4 {
+  font-weight: 400;
+  letter-spacing: -0.015em;
+}
+
+@keyframes floatY {
+  0%, 100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-14px);
+  }
+}
+
+@keyframes panelIn {
+  from {
+    opacity: 0;
+    transform: translateY(4px) scale(0.98);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes scrollX {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Selection */
+::selection {
+  background: #C58A2A;
+  color: #FBF7EF;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #FBF7EF;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C58A2A;
+  border-radius: 10px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #20221F;
+}
+
+@layer components {
+
+  /* Eyebrow — the sage signal, used sparingly as a label/marker */
+  .eyebrow {
+    @apply inline-flex items-center gap-2.5 font-mono text-[11px] tracking-[0.22em] uppercase mb-4 font-medium;
+    color: #C58A2A;
+  }
+
+  .eyebrow::before {
+    content: "";
+    @apply block w-6 h-px;
+    background: #C58A2A;
+  }
+
+  /* ===== Warm editorial section system ===== */
+
+  /* Despite the historical name, this is the LIGHT variant — cream
+     background, dark text (inherited from body). Kept for FAQ/Contact,
+     which stay light in the dark/light/dark rhythm. */
+  .section-light {
+    @apply relative bg-[#FBF7EF] overflow-hidden;
+  }
+
+  /* The genuine dark variant, matching Service Detail's .sd-dark tokens
+     (--sd-background:#171916, --sd-text:#F4F1E8). Sets a default text
+     color so children without an explicit color already read correctly;
+     components still override per-element where they need the muted tier. */
+  .section-dark {
+    @apply relative overflow-hidden;
+    background: #171916;
+    color: #F4F1E8;
+  }
+
+  .section-pad-dark {
+    @apply py-20 md:py-28;
+  }
+
+  .glass-card {
+    @apply relative rounded-[24px] overflow-hidden;
+    background: #FAF9F5;
+    border: 1px solid rgba(32, 34, 31, 0.14);
+    box-shadow: 0 20px 60px -32px rgba(32, 34, 31, 0.18);
+    transition: border-color 0.5s ease, box-shadow 0.5s ease, transform 0.5s cubic-bezier(0.16, 0.84, 0.44, 1);
+  }
+
+  .glass-card:hover {
+    border-color: rgba(197,138,42, 0.45);
+    box-shadow: 0 24px 70px -28px rgba(197,138,42, 0.18), 0 0 0 1px rgba(197,138,42, 0.08);
+  }
+
+  .btn-gold-outline {
+    @apply inline-flex items-center gap-2.5 rounded-full px-7 py-3.5 font-body font-semibold text-[13.5px] tracking-[0.01em] transition-all duration-300 whitespace-nowrap border;
+    color: #20221F;
+    border-color: rgba(32,34,31, 0.25);
+    background: transparent;
+  }
+
+  .btn-gold-outline:hover {
+    background: transparent;
+    border-color: #C58A2A;
+    color: #171717;
+    transform: translateY(-2px);
+    box-shadow: 0 16px 34px -14px rgba(197,138,42, 0.25);
+  }
+
+  .btn-gold-solid {
+    @apply inline-flex items-center gap-2.5 rounded-full px-8 py-4 font-body font-semibold text-[14px] tracking-[0.01em] transition-all duration-300 whitespace-nowrap;
+    background: #C58A2A;
+    color: #171717;
+    box-shadow: 0 14px 30px -12px rgba(197,138,42, 0.4);
+  }
+
+  .btn-gold-solid:hover {
+    background: #D9A441;
+    transform: translateY(-2px);
+    box-shadow: 0 18px 40px -12px rgba(197,138,42, 0.55);
+  }
+
+  .field-input-dark {
+    @apply rounded-2xl px-4 py-3 text-[14.5px] outline-none transition-all duration-200 w-full;
+    background: #FAF9F5;
+    color: #20221F;
+    border: 1px solid rgba(32, 34, 31, 0.14);
+  }
+
+  .field-input-dark:focus {
+    border-color: #C58A2A;
+    box-shadow: 0 0 0 3px rgba(197,138,42, 0.14);
+  }
+
+  .field-input-dark::placeholder {
+    color: rgba(32, 34, 31, 0.35);
+  }
+
+  /* Gradient Text — the yellow signal */
+  .grad-text {
+    background: linear-gradient(100deg, #171717, #C58A2A 55%, #D9A441);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  /* Buttons */
+  .btn {
+    @apply inline-flex items-center gap-2.5 rounded-full px-7 py-4 font-body font-semibold text-[14px] tracking-[0.01em] transition-all duration-300 whitespace-nowrap;
+  }
+
+  .btn-primary {
+    @apply text-white;
+    background: #111111;
+    box-shadow: 0 12px 28px -14px rgba(17, 17, 17, 0.5);
+  }
+
+  .btn-primary:hover {
+    background: #C58A2A;
+    transform: translateY(-2px);
+    box-shadow: 0 16px 32px -14px rgba(197,138,42, 0.5);
+  }
+
+  .btn-ghost {
+    background: transparent;
+    border: 1px solid rgba(17, 17, 17, 0.14);
+    color: #111111;
+  }
+
+  .btn-ghost:hover {
+    background: #111111;
+    border-color: #111111;
+    color: #FFFFFF;
+    transform: translateY(-2px);
+  }
+
+  /* Magnetic Button */
+  .btn-magnetic {
+    @apply transition-transform duration-300 ease-out;
+    will-change: transform;
+  }
+
+  /* Card Surface — crisp hairline border, no glass/blur, no gold glow */
+  .card-surface {
+    @apply rounded-xl2;
+    background: #FFFFFF;
+    border: 1px solid rgba(17, 17, 17, 0.08);
+    box-shadow: none;
+    transition: transform 0.5s cubic-bezier(0.16, 0.84, 0.44, 1), border-color 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .card-surface:hover {
+    border-color: rgba(17, 17, 17, 0.16);
+    box-shadow: 0 20px 44px -28px rgba(17, 17, 17, 0.22);
+  }
+
+  /* Inputs */
+  .field-input {
+    @apply rounded-2xl px-4 py-3 text-[14.5px] outline-none transition-all duration-200;
+    background: #FFFFFF;
+    color: #111111;
+    border: 1px solid rgba(17, 17, 17, 0.12);
+    box-shadow: none;
+  }
+
+  .field-input:focus {
+    border-color: #111111;
+    box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.06);
+  }
+
+  .field-input::placeholder {
+    color: #7A7A7A;
+  }
+
+  /* Section Padding */
+  .section-pad {
+    @apply py-24 md:py-32;
+  }
+
+  /* Typography */
+  h1,
+  h2,
+  h3 {
+    @apply font-display tracking-tight;
+    color: #20221F;
+  }
+
+  p {
+    @apply font-body leading-relaxed;
+    color: #66665F;
+  }
+}
+/* Premium custom cursor — only on devices with a real mouse */
+@media (hover: hover) and (pointer: fine) {
+  html.has-custom-cursor,
+  html.has-custom-cursor * {
+    cursor: none !important;
+  }
+
+  /* Why Nirmora / Nirmora Engine opt out of the custom cursor entirely —
+     the normal browser cursor is used there instead. */
+  html.has-custom-cursor .cursor-native-zone,
+  html.has-custom-cursor .cursor-native-zone * {
+    cursor: auto !important;
+  }
+}
+
+/* Engine discipline discs are real DOM buttons (rendered via drei's <Html>
+   inside the WebGL canvas) so they're keyboard-focusable — this gives that
+   focus a visible ring consistent with the Engine's gold accent. */
+.engine-disc-focus {
+  border-radius: 9999px;
+}
+.engine-disc-focus:focus-visible {
+  outline: 2px solid rgba(184, 137, 46, 0.85);
+  outline-offset: 3px;
+}
+
+/* Hide scrollbar but allow scrolling */
+
+html,
+body {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE & Edge */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
