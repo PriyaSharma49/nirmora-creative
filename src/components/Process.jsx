@@ -462,22 +462,41 @@ export default function Process() {
           </RevealStagger>
         </div>
 
-        {/* Vertical connected timeline — mobile */}
-        <div ref={mobileWrapRef} className="md:hidden relative pl-8">
-          <div className="absolute left-[27px] top-2 bottom-2 w-px bg-gradient-to-b from-[#20221F]/25 via-[#20221F]/12 to-transparent" />
-          <RevealStagger className="flex flex-col gap-10">
+        {/* Vertical connected timeline — mobile. A true two-column grid: a
+            fixed 64px marker column (line + circle) and a fluid content
+            column, physically separate CSS Grid tracks rather than
+            absolute-position math. A circle constrained to its own grid
+            column cannot visually reach into the content column next to
+            it — that's what makes this immune to the class of overlap bug
+            two earlier absolute-positioned attempts had. The marker
+            column is wide enough (64px) to contain StepGlow's 6px ring
+            expansion and the 02 step's rotated-diamond overlay too, so
+            neither bleeds into the heading beside it. */}
+        <div ref={mobileWrapRef} className="md:hidden relative">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute top-6 bottom-6 w-px bg-gradient-to-b from-[#20221F]/22 via-[#20221F]/14 to-[#20221F]/22"
+            style={{ left: 32 }}
+          />
+          <RevealStagger className="flex flex-col gap-9">
             {STEPS.map((s, i) => (
-              <RevealItem key={s.n} className="relative">
-                <div
-                  ref={i === 3 ? m04Ref : i === 4 ? m05Ref : undefined}
-                  className="absolute -left-8 top-0 w-11 h-11 rounded-full flex items-center justify-center border border-[#20221F]/14 bg-[#F4F0E7] font-mono text-[12px] text-[#20221F]"
-                >
-                  <span className="relative z-30">{s.n}</span>
-                  <StepGlow progress={mProgress[i]} reduced={reduced} />
-                  <StepAnim index={i} axis="y" progress={mProgress[i]} travel={mTravel} reduced={reduced} compact />
+              <RevealItem key={s.n} className="w-full">
+                <div className="grid grid-cols-[64px_minmax(0,1fr)] items-start gap-x-4">
+                  <div className="flex items-center justify-center">
+                    <div
+                      ref={i === 3 ? m04Ref : i === 4 ? m05Ref : undefined}
+                      className="relative z-10 flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-[#20221F]/14 bg-[#F4F0E7] font-mono text-[12px] text-[#20221F]"
+                    >
+                      <span className="relative z-30">{s.n}</span>
+                      <StepGlow progress={mProgress[i]} reduced={reduced} />
+                      <StepAnim index={i} axis="y" progress={mProgress[i]} travel={mTravel} reduced={reduced} compact />
+                    </div>
+                  </div>
+                  <div className="min-w-0 pt-1.5">
+                    <h4 className="font-display text-[19px] font-semibold text-[#20221F]">{s.title}</h4>
+                    <p className="mt-2.5 text-[14px] leading-relaxed text-[#66665F]">{s.desc}</p>
+                  </div>
                 </div>
-                <h4 className="font-display text-[18px] font-semibold text-[#20221F] mb-2">{s.title}</h4>
-                <p className="text-[13.5px] leading-relaxed text-[#66665F] max-w-[420px]">{s.desc}</p>
               </RevealItem>
             ))}
           </RevealStagger>
