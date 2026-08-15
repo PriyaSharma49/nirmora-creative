@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { motion, useMotionValue, useSpring } from 'framer-motion'
+import { motion, useInView, useMotionValue, useSpring } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import Reveal from './Reveal.jsx'
 import { SERVICES } from '../data/services.js'
@@ -67,6 +67,14 @@ const PARTICLES = [
 
 function ServiceTile({ service, index, videoSrc, posterSrc, isActive, onActivate, onDeactivate, parallaxX, parallaxY }) {
   const videoRef = useRef(null)
+  const tileRef = useRef(null)
+  // Previously every video's `src` was set immediately on mount, so all 5
+  // service videos started a metadata fetch on page load even though this
+  // section sits below the fold. Deferring `src` until the card is
+  // ~200px from entering view means only nearby cards ever start a
+  // network request — the poster image (already always shown until
+  // hover/tap) covers the gap, so nothing here is visually different.
+  const nearViewport = useInView(tileRef, { once: true, margin: '200px' })
   const [hovered, setHovered] = useState(false)
   const active = hovered || isActive
   const float = FLOAT[index % FLOAT.length]
@@ -91,6 +99,7 @@ function ServiceTile({ service, index, videoSrc, posterSrc, isActive, onActivate
 
   return (
     <motion.div
+      ref={tileRef}
       initial={{ opacity: 0, y: 46, rotate: index % 2 === 0 ? -2.5 : 2.5 }}
       whileInView={{ opacity: 1, y: 0, rotate: 0 }}
       viewport={{ once: true, margin: '-80px' }}
@@ -147,7 +156,7 @@ function ServiceTile({ service, index, videoSrc, posterSrc, isActive, onActivate
             />
             <video
               ref={videoRef}
-              src={videoSrc}
+              src={nearViewport ? videoSrc : undefined}
               muted
               loop
               playsInline

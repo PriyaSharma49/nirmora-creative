@@ -237,7 +237,8 @@ function sendContactClientEmail(body) {
     row('Service', body.service) +
     row('Project Details', body.message) +
     '</table>' +
-    '<p style="font-size:13px;color:' + MUTED + ';margin:0;">— Nirmora Creative</p>'
+    '<p style="font-size:13.5px;line-height:1.6;color:' + MUTED + ';margin:20px 0 0;">We look forward to speaking with you and understanding your requirements.</p>' +
+   '<p style="font-size:13px;color:' + MUTED + ';margin:20px 0 0;">— Nirmora Creative</p>'
   );
   GmailApp.sendEmail(body.email, 'Nirmora Creative — We Received Your Inquiry [' + body.referenceId + ']', '', { htmlBody: html, name: 'Nirmora Creative' });
 }
@@ -253,9 +254,17 @@ function sendContactAdminEmail(body) {
     row('Service', body.service) +
     row('Project Details', body.message) +
     row('Submitted At', formatCreatedAt(new Date())) +
-    '</table>'
+    '</table>' +
+    '<p style="font-size:13.5px;line-height:1.6;color:' + MUTED + ';margin:20px 0 0;">We look forward to speaking with you and understanding your requirements.</p>' +
+    '<p style="font-size:13px;color:' + MUTED + ';margin:20px 0 0;">— Nirmora Creative</p>'
   );
-  GmailApp.sendEmail(getNirmoraEmail(), 'New Nirmora Contact Inquiry — ' + body.name + ' — ' + body.referenceId, '', { htmlBody: html, name: 'Nirmora Creative' });
+
+  GmailApp.sendEmail(
+    getNirmoraEmail(),
+    'New Nirmora Contact Inquiry — ' + body.name + ' — ' + body.referenceId,
+    '',
+    { htmlBody: html, name: 'Nirmora Creative' }
+  );
 }
 
 function sendBookingClientEmail(body) {
@@ -269,7 +278,7 @@ function sendBookingClientEmail(body) {
     row('Service', body.service) +
     row('Project Details', body.message) +
     '</table>' +
-    '<p style="font-size:13.5px;line-height:1.6;color:' + MUTED + ';margin:0;">We look forward to connecting with you.</p>' +
+    '<p style="font-size:13.5px;line-height:1.6;color:' + MUTED + ';margin:0;">We look forward to speaking with you and understanding your requirements.</p>' +
     '<p style="font-size:13px;color:' + MUTED + ';margin:20px 0 0;">Regards,<br />Nirmora Creative — We engineer growth.</p>'
   );
 
@@ -296,9 +305,17 @@ function sendBookingAdminEmail(body) {
     row('Service', body.service) +
     row('Project Details', body.message) +
     row('Created At', formatCreatedAt(new Date())) +
-    '</table>'
+    '</table>' +
+    '<p style="font-size:13.5px;line-height:1.6;color:' + MUTED + ';margin:20px 0 0;">We look forward to speaking with you and understanding your requirements.</p>' +
+    '<p style="font-size:13px;color:' + MUTED + ';margin:20px 0 0;">Regards,<br />Nirmora Creative — We engineer growth.</p>'
   );
-  GmailApp.sendEmail(getNirmoraEmail(), 'New Call Booking — ' + body.name + ' — ' + body.referenceId, '', { htmlBody: html, name: 'Nirmora Creative' });
+
+  GmailApp.sendEmail(
+    getNirmoraEmail(),
+    'New Call Booking — ' + body.name + ' — ' + body.referenceId,
+    '',
+    { htmlBody: html, name: 'Nirmora Creative' }
+  );
 }
 
 function sendReminderClientEmail(body) {

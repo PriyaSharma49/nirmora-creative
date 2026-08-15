@@ -1,3 +1,4 @@
+import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AnimatePresence } from 'framer-motion'
 
@@ -8,20 +9,29 @@ import ScrollToTop from './components/ScrollToTop.jsx'
 import HashScrollHandler from './components/HashScrollHandler.jsx'
 import PageTransition from './components/PageTransition.jsx'
 
+// Home loads eagerly — it's the overwhelmingly common entry point and
+// shouldn't wait on a lazy-chunk round-trip. Every other page is
+// code-split: previously all 8 pages were bundled into one ~564KB chunk
+// that loaded in full on every visit regardless of which single route was
+// requested. Suspense's fallback is `null` rather than a spinner — routes
+// only suspend on the initial JS chunk fetch (near-instant after the first
+// visit, since the browser caches it), and PageTransition's own fade-in
+// already covers the visual entrance, so a spinner would just flash.
 import Home from './pages/Home.jsx'
-import ServiceDetail from './pages/ServiceDetail.jsx'
-import ProjectDetail from './pages/ProjectDetail.jsx'
-import AboutPage from './pages/AboutPage.jsx'
-import ContactPage from './pages/ContactPage.jsx'
-import FAQPage from './pages/FAQPage.jsx'
-import PrivacyPage from './pages/PrivacyPage.jsx'
-import TermsPage from './pages/TermsPage.jsx'
+const ServiceDetail = lazy(() => import('./pages/ServiceDetail.jsx'))
+const ProjectDetail = lazy(() => import('./pages/ProjectDetail.jsx'))
+const AboutPage = lazy(() => import('./pages/AboutPage.jsx'))
+const ContactPage = lazy(() => import('./pages/ContactPage.jsx'))
+const FAQPage = lazy(() => import('./pages/FAQPage.jsx'))
+const PrivacyPage = lazy(() => import('./pages/PrivacyPage.jsx'))
+const TermsPage = lazy(() => import('./pages/TermsPage.jsx'))
 
 function AnimatedRoutes() {
   const location = useLocation()
 
   return (
     <AnimatePresence mode="wait">
+      <Suspense fallback={null}>
       <Routes location={location} key={location.pathname}>
         <Route
           path="/"
@@ -89,6 +99,7 @@ function AnimatedRoutes() {
         />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      </Suspense>
     </AnimatePresence>
   )
 }
